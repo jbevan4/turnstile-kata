@@ -1,2 +1,2 @@
 def transition():
-    return
+    return "Locked"
