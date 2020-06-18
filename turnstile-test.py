@@ -6,7 +6,9 @@ from turnstile import State
 class MyTestCase(unittest.TestCase):
 
     def setUp(self):
-        states = [State("Locked", "pass", "Unlocked"), State("Unlocked", "coin", "Locked")]
+        states = [State("Locked", transitions=[("pass", "Unlocked"), ("enable", "NoEntry")]),
+                  State("Unlocked", transitions=[("coin", "Locked"), ("disable", "NoEntry")]),
+                  State("NoEntry", transitions=[("disable", "Locked")])]
         self.state_machine = StateMachine(
             states=states,
             initial_state=states[0]
@@ -39,7 +41,21 @@ class MyTestCase(unittest.TestCase):
         self.state_machine.transition("pass")
         self.state_machine.transition("pass")
         self.assertEqual("Unlocked", self.state_machine.current_state.name)
-        
+
+    def test_can_move_to_a_no_entry_state_from_locked(self):
+        self.state_machine.transition("enable")
+        self.assertEqual("NoEntry", self.state_machine.current_state.name)
+
+    def test_can_move_to_a_no_entry_state_from_unlocked(self):
+        self.state_machine.transition("pass")
+        self.state_machine.transition("disable")
+        self.assertEqual("NoEntry", self.state_machine.current_state.name)
+
+    def test_can_remain_in_a_no_entry_state_when_seeing_a_pass(self):
+        self.state_machine.transition("enable")
+        self.state_machine.transition("pass")
+        self.assertEqual("NoEntry", self.state_machine.current_state.name)
+
 
 if __name__ == '__main__':
     unittest.main()

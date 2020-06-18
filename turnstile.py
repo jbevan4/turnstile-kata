@@ -1,10 +1,8 @@
-
 class State:
 
-    def __init__(self, name=None, transition=None, direction=None):
+    def __init__(self, name=None, transitions=None):
         self.name = name
-        self.transition = transition
-        self.direction = direction
+        self.transitions = {k: v for k, v in transitions}
 
 
 class StateMachine:
@@ -15,7 +13,7 @@ class StateMachine:
         self.current_state = initial_state
 
     def transition(self, action):
-        if self.current_state.transition == action:
-            self.current_state = self.state_mapping[self.current_state.direction]
+        if self.current_state.transitions.get(action):
+            self.current_state = self.state_mapping[self.current_state.transitions.get(action)]
 
 
