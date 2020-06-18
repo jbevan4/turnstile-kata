@@ -31,6 +31,15 @@ class MyTestCase(unittest.TestCase):
         self.state_machine.transition("coin")
         self.assertEqual("Locked", self.state_machine.current_state.name)
 
+    def test_remain_in_a_locked_state_when_seeing_a_coin(self):
+        self.state_machine.transition("coin")
+        self.assertEqual("Locked", self.state_machine.current_state.name)
+
+    def test_remain_in_a_unlocked_state_when_seeing_a_pass(self):
+        self.state_machine.transition("pass")
+        self.state_machine.transition("pass")
+        self.assertEqual("Unlocked", self.state_machine.current_state.name)
+        
 
 if __name__ == '__main__':
     unittest.main()
