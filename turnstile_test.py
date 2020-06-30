@@ -3,7 +3,7 @@ from turnstile import StateMachine
 from turnstile import State
 
 
-class MyTestCase(unittest.TestCase):
+class TurnstileTestCase(unittest.TestCase):
 
     def setUp(self):
         states = [State("Locked", transitions=[("pass", "Unlocked"), ("enable", "NoEntry")]),
